@@ -1,0 +1,124 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block 'content' %}
+
+<div class="cotainer">
+    <p>
+    <h3 class="text-center p-4 bg-primary">Create Employee</h3>
+    <strong> Note :- </strong> <span>When you create an emplomyee the you do not need to create his user account , it
+        will be auto generate</span>
+    </p>
+    <div class="row m-3">
+        <div class="col-lg-6  col-sm-12 ">
+            <div class="text-center">
+                {% if error %}
+                <p class="alert alert-danger">{{error}}</p>
+                {% elif success %}
+                <p class="alert alert-success">{{success}}</p>
+                {% endif %}
+            </div>
+            <!-- form -->
+            <form action="../create-employee" class="align-items-center border shadow p-3" method="post">
+                <p class="text-center"><strong>Current Manager : </strong>{{user.boss_id}}</p>
+                {% csrf_token %}
+                <div class="form-group mt-3">
+                    Manager Id : <input type="text" required class="form-control" name="manager_id"
+                        placeholder="Enter Manager Id" value="{{user.boss_id}}">
+                </div>
+                <div class="form-group mt-3">
+                    Enter Employee Id :
+                    <input type="text" name="emp_id" required class="form-control"
+                        placeholder=" Enter Employee Id Provided By Company...">
+                </div>
+                <div class="form-group mt-3">
+                    Employee Name :
+                    <input type="text" name="emp_name" required class="form-control" placeholder="Enter Employee Name">
+
+                </div>
+                <div class="form-group">
+                    Phone number :
+                    <input type="number" class="form-control" required placeholder="Enter employee phone number"
+                        name="phone_number">
+                </div>
+                <div class="form-group">
+                    Employee Email :
+                    <input type="email" name="email" required class="form-control"
+                        placeholder="Enter Employee Email Address">
+                </div>
+                <div class="form-group my-3">
+                    Employee DOB :
+                    <input type="date" name="DOB" required class="form-control" placeholder="Enter Employee DOB">
+                </div>
+                <div>
+                    <label for="id_card"> Select id Card:</label>
+                    <select name="employee_id_card" id="id_card" class="form-control">
+                        <option selected disabled>---select id card---</option>
+                        {% for value, label in id_card_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    Enter Card number :
+                    <input type="text" placeholder="Enter card number" name="card_number" class="form-control">
+                </div>
+                <div class="form-group">
+                    Manager Code (you can change also !) :
+                    <input type="text" placeholder="it is a random code ..." value="{{manager_code}}"
+                        name="manager_code" class="form-control">
+                </div>
+                <div class="form-group text-center mt-3">
+                    <input type="submit" class="btn btn-success" value="Create Employee">
+                </div>
+            </form>
+        </div>
+        <!-- table -->
+        <div class="col-lg-6 shadow">
+            <div class="mt-3">
+                <p class="text-center"> <a href="../all-emp" class="btn btn-warning ">Employee List</a>&larr; click view
+                    all
+                </p>
+                <p> <strong> Search Employee :</strong>
+                    <input type="search" style="width: 200px;" name="" class="form-control"
+                        placeholder="Search Employee.." id="searchInput" onkeyup="searchTable()">
+                </p>
+            </div>
+
+            <div style="height: 80%; overflow: scroll;"
+                class="table-responsive-sm table-responsive-md table-responsive-xl table-responsive-lg table-responsive-xxl">
+                <h4 class="text-center "> Your Company Employee</h4>
+                <div>
+                    <table class="table table-striped" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Employee-Name</th>
+                                <th>Employee-ID</th>
+                                <th>Id-Card</th>
+                                <th>Id-Number</th>
+                                <th>Number</th>
+                                <th>Joining-Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in emp_data %}
+                            <tr class="">
+                                <td>{{e.employee_name}}</td>
+                                <td>{{e.employee_id}}</td>
+                                <td>{{e.employee_id_card}}</td>
+                                <td>{{e.card}}</td>
+                                <td>{{e.phone_number}}</td>
+                                <td>{{e.employee_joining_date}}</td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+{% endblock %}

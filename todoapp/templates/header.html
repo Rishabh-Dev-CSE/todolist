@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task GIB - Header</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style-main.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+
+<body>
+
+    <!-- header section begin -->
+    <header class="container-fluid p-0">
+        <nav class="navbar position-relative container-fluid mt-0 navbar-expand-lg">
+            <div class="container ">
+                <a class="navbar-brand" href="../">
+                    <img src="{% static 'images/mylogo/TaskGIB.webp' %}" height="100" width="100"
+                        style="    border-radius: 170px 15px 175px 7px;" alt="">
+                    Task GIB
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav navbar-nav-items   me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../show-all-task">All Task</a>
+                        </li>
+
+                        {% if request.user.boss_id %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="../managertouser">Do the task </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Manager Task</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../employee-dashboard">Settings</a>
+                        </li>
+                        {% endif %}
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pending</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Completed</a>
+                        </li>
+                        {% if request.user.boss_id %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="../all-emp"> All Employee</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../manager-dashboard">Settings</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <div class="action-item">
+                        <a href="mailto:taskgibsupport@gmail.com" class="support-email">Support:
+                            taskgibsupport@gmail.com</a>
+
+                        {% if user.is_authenticated %}
+
+                        <a href="../logoutuser" class="btn btn-danger">logout</a>
+                        {% else %}
+                        <a href="../loginuser" class="btn btn-custom me-2">Login</a>
+                        <a href="../user-create" class="btn btn-success">Signup</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Hamburger Icon -->
+            <div class="menu-icon" style="margin-right: 20px;" onclick="toggleMenu()">
+                &#9776; <!-- Hamburger Icon -->
+            </div>
+
+        </nav>
+    </header>
+    <!-- header section end -->
+
+
+    {% block 'content' %}
+
+    {% endblock %}
+
+    <!-- humbarger section begin -->
+
+    <nav id="sidebar">
+        <div class="nav-close" style="margin-right: 0px;color: white; top: 20px; margin-left: 20vh;"
+            onclick="toggleMenu()">
+            &#10060;<!-- Hamburger Icon -->
+        </div>
+
+        <div class="container ">
+            <div class="company-profile">
+                <img src="{% static 'images/default.png' %}" height="100" width="100" alt="office logo ...">
+            </div>
+            <p style="color: white;">
+                {% if request.user.boss_id %}
+                Manager id : <strong>{{ user.boss_id }}</strong>
+                {% elif request.user.user_id %}
+                User id : <strong>{{ user.user_id }}</strong>
+                {% else %}
+                User id : <strong>Not Found</strong>
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="dropdown-container">
+            <span class="drodowon">Menu---🔽 </span>
+            <ul>
+                <li><a href="../">Home</a></li>
+                {% if request.user.boss_id %}
+                <li><a href="../all-emp"> All Employee</a></li>
+                <li><a href="../show-all-task">All Task</a></li>
+                {% else %}
+                <li><a href="../all-user-task">My Task</a></li>
+                <!-- <li><a  href="../show-all-task">All Task</a></li> -->
+                <li><a href="../show-all-task">Manager Task</a></li>
+                {% endif %}
+                <li><a href="#">Pending</a></li>
+                <li><a href="#"> Completed</a></li>
+
+            </ul>
+        </div>
+
+        <div class="container action-btn">
+            {% if user.is_authenticated %}
+            <a href="../logoutuser" class="btn  btn-danger">Logout</a>
+            {% else %}
+            <a href="../loginuser" class="btn btn-custom me-2">Login</a>
+            <a href="../user-create" class="btn btn-success">Signup</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!--  humbarger section end -->
+
+    <!-- <footer class="footer position-relative" style="position: absolute;margin-bottom: -10px;">
+            <h1 class="p-4 bg-primary">footer</h1>
+        </footer> -->
+
+</body>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+</html>

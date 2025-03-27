@@ -1,0 +1,129 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block 'content' %}
+
+<style>
+    .discreption{
+        display: none;
+        position: absolute;
+        height: 200px;
+        overflow-y: scroll;
+        width: 100%;
+        padding: 10px;
+        background-color: black;
+        color: white;
+        border: 2px solid white;
+        z-index: 1000;
+        left: 0;
+        margin: 0 20px 0 20px;
+
+    }
+    .view-discreption{
+        padding: -20px;
+        height: auto;
+        width: 100%;
+    }
+
+    .view-discreption:hover  .discreption,
+    .view-discreption:hover  .discreption{
+            display: block;
+    }
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-0"></div>
+        <div class="col-lg-9 col-md-12 col-sm-12 table-responsive-md ">
+            {% if request.user.boss_id %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Manager</th>
+                        <th>Employee</th>
+                        <th>Emp_name</th>
+                        <th>Status</th>
+                        <th>Duration_date</th>
+                        <th>Referred_date&time </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in mg_task %}
+                    <tr>
+                        <td>{{g.employee_user_id.manager_id}}</td>
+                        <td>{{g.employee_user_id}}</td>
+                        <td>{{g.employee_user_id.employee_name}}</td>
+                        <td>{{g.task_status}}</td>
+                        <td>{{g.task_duration}}</td>
+                        <td>{{g.send_date}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>
+                <strong>Enter The Manager Id : </strong><span><input class="form-control" style="width: 200px;"
+                        type="search" id="findTask"></span>
+            </p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Emp_name</th>
+                        <th>Status</th>
+                        <th>Duration_date</th>
+                        <th>Referred_date&time</th>
+                        <th>what_to_do</th>
+                        <th>check</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for g in emp_task %}
+                    <tr>
+                        <td>{{g.employee_user_id.employee_name}}</td>
+                        <td>{{g.task_status}}</td>
+                        <td>{{g.task_duration}}</td>
+                        <td>{{g.send_date}}</td>
+                        <td>
+                            <a href="#" class="view-discreption">About Task
+                                <span class="discreption">
+                                    {{g.task_discreption}}
+                                </span>
+                            </a>
+
+
+                        </td>
+                        <td class="btn btn-success" id="statusUpdate{{g.id}}">completed</td>
+                    </tr>
+
+                    <script>
+                        $(function(){
+                            $('#statusUpdate{{g.id}}').click(function(){
+                               var completed = $('#statusUpdate{{g.id}}').text()
+                               var task_id = "{{g.id}}"
+
+                               $.ajax({
+                                    url:'../task-update',
+                                    data:{'completed':completed, 'task_id':task_id},
+                                    success:function(res){
+                                        alert(res)
+                                        location.reload()
+                                    }
+                               })
+                            })
+                        })
+                    </script>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+        </div>
+        <div class="col-lg-3">
+            <span class="discreption">
+                {{g.task_discreption}}
+            </span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

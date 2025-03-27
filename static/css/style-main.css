@@ -1,0 +1,285 @@
+body {
+    font-family: Arial, sans-serif;
+}
+/* ................... */
+
+
+main{
+    display: grid;
+    grid-template-areas: "head head head"
+                        "side content content"
+                        "foot foot foot";
+}
+header{
+    grid-area: head;
+}
+article{
+    grid-area: content;
+}
+aside{
+    grid-area: side;
+}
+footer{
+    grid-area: foot;
+}
+
+/* ------------------ */
+.navbar {
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    padding: 15px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+    margin-right: 20px;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.support-email {
+    color: white;
+    font-size: 14px;
+    margin-right: 20px;
+}
+
+.btn-custom {
+    background-color: #ffcc00;
+    color: #333;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-bottom: 0px;
+}
+
+.btn-custom:hover {
+    background-color: #e6b800;
+}
+
+
+/* ------------humberguer section css ---------------- */
+
+
+/* Menu Icon (Hamburger) */
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+    color: white;
+}
+
+/* Sidebar Navigation */
+#sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    left: -250px;
+    /* Initially hidden */
+    background-color: #333;
+    transition: left 0.3s ease-in-out;
+    padding-top: 60px;
+    opacity: 0.99;
+}
+
+/* Sidebar Links */
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#sidebar ul li {
+    padding: 15px;
+}
+
+#sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    font-size: 18px;
+}
+
+#sidebar ul li a:hover {
+    background-color: #575757;
+    width: 100%;
+    padding: 5px;
+    border-left: 2px solid green;
+}
+
+/* Active Class to Show Menu */
+#sidebar.active {
+    left: 0;
+}
+
+.nav-close {
+    margin-right: 24px;
+    margin-top: 2px;
+    /* color: white; */
+    /* top: 20px; */
+    text-align-last: right;
+}
+
+.drodowon {
+    color: aliceblue;
+    border: 1px solid white;
+    text-align: center;
+    border-radius: 16px;
+    display: block;
+}
+
+.dropdown-container {
+    margin-top: 2vh;
+    position: relative;
+
+
+}
+
+.dropdown-container ul {
+    position: absolute;
+    background: grey;
+    color: white;
+    list-style: none;
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+    overflow-y: hidden;
+    z-index: 20;
+    border: 1px solid #ccc;
+    height: 0;
+    transform: translateY(-10px);
+    visibility: hidden;
+    transition: height 0.7s ease, transform 0.5s ease, visibility 0.5s;
+}
+
+.dropdown-container:hover ul {
+    height: 250px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    transform: translateY(0);
+    visibility: visible;
+    border-bottom: 10px solid red;
+    border-radius: 0px 0px 5px 5px;
+
+}
+
+.action-btn {
+    position: fixed;
+    bottom: 10px;
+
+}
+
+/* --- company profile ----- */
+
+.company-profile {
+    background-size: 100% 100%;
+    margin-top: 100px;
+    height: auto;
+    width: fit-content;
+    border: 2px solid green;
+    border-radius: 50%;
+}
+
+.company-profile img {
+    border-radius: 50%;
+}
+
+.menu-icon {
+    display: none;
+}
+
+
+
+
+/*  Task create btn start   */
+.task-body {
+    height: 400px;
+    width: 100%;
+    /* border: 2px solid red; */
+    background: transparent;
+}
+
+.task-text{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.task-text div {
+    text-align: end;
+    flex-grow: 1;
+    flex-basis: 200;
+    color: rgb(0, 0, 0);
+}
+
+
+
+
+/* media settings */
+
+@media (max-width:995px) {
+
+    *{
+        color: white;
+    }
+    .menu-icon {
+        display: block;
+    }
+    .navbar{
+        width: 100%;
+    }
+
+    #sidebar {
+        display: block;
+    }
+
+    #navbarNav {
+        display: none;
+    }
+
+    .carousel-item img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+
+
+    .task-text div {
+        text-align: end;
+        color: white;
+    }
+
+    body {
+        background-color: black;
+    }
+
+
+}
+
+@media (min-width:1000px) and (max-width:1300px) {
+    .action-item {
+        display: none;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
+
+@media (min-width:1301px){
+    #sidebar {
+        display: none;
+    }
+}

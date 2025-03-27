@@ -1,0 +1,47 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block 'content' %}
+<h1 class="text-center p-4 bg-primary">user Craete</h1>
+<div class="p-2">
+   <strong>If you are a company manager :-</strong> <a href="../create-manager" style="text-decoration: none; font-size: 20px; " class="btn btn-custom">Create Manger</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8 col-sm-12 ">
+            <form action="../user-create" class="border shadow p-3"  autocomplete="off" autocapitalize="on" method="post">
+                {% csrf_token %}
+                <div class="form-group mt-2">
+                    Craete User Id / (if you have id write down):
+                    <input type="text" class="form-control" placeholder="Create User id and write down" name="user_id" id="">
+                </div>
+                <div class="form-group mt-2">
+                    Phone :
+                    <input type="number" placeholder="Enter your phone number" class="form-control" name="phone_number">
+                </div>
+                <div class="form-group mt-2">
+                    Email :
+                    <input type="email" placeholder="Enter email address " class="form-control" name="email">
+                </div>
+                <div class="form-group mt-2">
+                    Password :
+                    <input type="password" placeholder="Create a Strong Password" class="form-control" name="password1">
+                </div>
+                <div class="form-group mt-2">
+                    Confirm :
+                    <input type="password" class="form-control" name="password2">
+                </div>
+                <div class="form-group mt-4 text-center">
+                    <input type="submit" class="btn btn-success" name="" value="submit" id="">
+                </div>
+                {% if msg %}
+                <p>{{msg}}</p>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block 'content' %}
+<h1 class="text-center p-5 bg-primary"> Login User & Manager </h1>
+<div class="container">
+    {% if logout %}
+    <p class="alert alert-danger"> {{logout}}</p>
+    {% endif %}
+    {% if msg %}
+    <p class="alert alert-danger">{{msg}}</p>
+    {% endif %}
+
+    <p>
+        {% if request.user.boss_id %}
+        Manager id : <strong>{{ user.boss_id }}</strong>
+        {% elif request.user.user_id %}
+        User id : <strong>{{ user.user_id }}</strong>
+        {% else %}
+        Current User : <strong>Not Found</strong>
+        {% endif %}
+    </p>
+    <div class="row">
+        <div class="col-lg-4 col-sm-6">
+            <div class="container ps-3 form-group">
+                Select Roll :
+                <select style="color: black;" name="" class="form-control" id="identity">
+                    <option selected disabled>---Select you are ----</option>
+                    <option style="color: black;" value="user">I'm User</option>
+                    <option style="color: black;" value="manager">I'm Company Manager</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 ">
+            <!-- user login form start -->
+            <form action="../loginuser" style="display: none;" class="border my-5 p-3 shadow container-fluid"
+                id="user-login" method="post">
+                <!-- <p><strong>NOTE :</strong> If your are a company manager id (mguid123)! enter otherwise enetr phone number</p> -->
+                {% csrf_token %}
+                <div class="form-group mt-2">
+                    Enter Phone Number :
+                    <input type="number" class="form-control" name="phone_number" placeholder="Enter Phone number.">
+
+                </div>
+                <div class="form-group mt-2">
+                    Enter password :
+                    <input type="password" class="form-control" name="password" placeholder="password">
+
+                </div>
+                <div class="form-group text-center mt-2">
+
+                    <input type="submit" class=" btn btn-success" value="Login user">
+
+
+                </div>
+                <a href="../forgot-password">Forgot Password</a>
+                {% if msg %}
+                <p>{{msg}}</p>
+                {% endif %}
+            </form>
+            <!-- user login form end -->
+
+            <!-- manager login form start -->
+            <form action="../login-manager" class="border my-5 p-3 shadow container-fluid" style="display: none;"
+                id="manager-login" method="post">
+                <!-- <a href="../all-emp"> All Employee</a> -->
+                {% csrf_token %}
+                <input type="hidden" id="boss_id" value="{{boss_id}}">
+
+                <div class="form-group">
+                    Manage id :
+                    <input type="text" class="form-control" name="boss_id" placeholder="Enter manger id .."><br>
+                </div>
+                <div class="form-group">
+                    Password :
+                    <input type="password" class="form-control" name="password" placeholder="Your password">
+                </div>
+                <div class="form-group text-center mt-4">
+                    <input type="submit" class="btn btn-success" value="Login Manger" id="login-manager">
+                </div>
+                <div>
+                    <a href="../forgot-password">Forgot Password</a>
+                    <div> Are you not a manager :- <a href="../create-manager"> Get new manager id</a></div>
+                </div>
+                {% if msg %}
+                <p>{{msg}}</p>
+                {% endif %}
+            </form>
+            <!-- manager login form end -->
+
+
+        </div>
+
+        <div class="col-lg-4"></div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        $('#identity').change(function () {
+            var id_value = $('#identity').val()
+
+
+            if (id_value === 'user') {
+                // if (confirm('Are you sure')) {
+                $('#user-login').css('display', 'block')
+                $('#manager-login').css('display', 'none')
+                // }
+            } else {
+                // if (confirm('Are you sure')) {
+
+                $('#user-login').css('display', 'none')
+                $('#manager-login').css('display', 'block')
+
+                // }
+            }
+
+
+        })
+    })
+</script>
+
+{% endblock %}

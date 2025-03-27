@@ -1,0 +1,56 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block 'content' %}
+
+<h1 class="text-center p-4 bg-primary"> Craete Manager Account</h1>
+<div class="text-center">
+    <a href="../create-employee" class="btn  m-3 btn-warning">Add employee</a>
+    <a href="../login-manager" class="btn btn-success"> Login manager</a>
+</div>
+<div class="text-center">
+    {% if msg %}
+    <p>{{msg}}</p>
+    {% endif %}
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <form action="../create-manager" class="border p-3" method="post">
+                {% csrf_token %}
+                <div class="form-group mt-">
+                    Create Manager id:
+                     <input type="text" placeholder="Create Manager ID .." class="form-control" name="manager_id" id="">
+                </div>
+                <div class="form-group mt-4">
+                    Phone :
+                    <input type="number" class="form-control" placeholder="Enter phone number" name="phone_number">
+
+                </div>
+                <div class="form-group mt-4">
+
+                    Email :
+                    <input type="email" class="form-control" placeholder="Enter email address" name="email">
+                </div>
+                <div class="form-group mt-4">
+
+                    Password :
+                    <input type="password" class="form-control" placeholder="Craete a strong password" name="password1">
+                </div>
+                <div class="form-group mt-4">
+
+                    Confirm Password :
+                    <input type="password" class="form-control" placeholder="Re-enter password" name="password2">
+                </div>
+                <div class="form-group text-center mt-4">
+                    <input type="submit" name="" class="btn btn-success" value="submit" id="">
+                </div>
+
+            </form>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
+
+{% endblock %}
