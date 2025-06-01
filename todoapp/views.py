@@ -6,7 +6,11 @@ from django.contrib.auth.decorators import login_required
 import random as rm
 from django.contrib import messages
 import datetime as dt
-
+from django.http import JsonResponse
+from django.core.files.base import ContentFile
+import base64
+import json
+import os
 # Home view function, renders the home page........
 def home(request):
     return render(request, 'index.html')
@@ -138,6 +142,7 @@ def createEmployee(request):
     return render(request, 'createemployee.html', {'emp_data': employee_data,'id_card_choices': id_card_choices,'manager_code':r_code})
 
 # Function to get all employees under a manager........
+@login_required
 @csrf_exempt
 def allEmp(request):
     all_emp = BossCustomUser.objects.get(boss_id=request.user.boss_id)
@@ -171,12 +176,13 @@ def loginManager(request):
                 return render(request, 'loginuser.html', {'msg': 'Invalid credentials'})
 
     return render(request, 'loginuser.html')
- 
+
 @login_required
+@csrf_exempt
 def managerToUserTask(request, employee_id=None):
     all_emp = BossCustomUser.objects.get(boss_id=request.user.boss_id)
     emp_data = EmployeeModel.objects.filter(manager_id=all_emp)
-    
+
     if employee_id:
         data_of_employee = EmployeeModel.objects.get(employee_id = employee_id)
         if data_of_employee is not None:
@@ -210,28 +216,32 @@ def managerToUserTask(request, employee_id=None):
     return render(request, 'managertousertask.html', {'allemp': emp_data,})
 
 #function to show all manager task.......
+
+@login_required
 @csrf_exempt
 def allManagerTask(request):
     employee_side_task=''
-    mg_task = '' 
+    mg_task = ''
     if request.user.boss_id:
         mg_task = ManagerToUserTask.objects.filter(manager_id=request.user.id)
         print(mg_task)
     else:
         find_emp = EmployeeModel.objects.get(employee_id = request.user)
-        employee_side_task = ManagerToUserTask.objects.filter(employee_user_id = find_emp) 
+        employee_side_task = ManagerToUserTask.objects.filter(employee_user_id = find_emp)
     return render(request, 'alltask.html',{'mg_task':mg_task, 'emp_task':employee_side_task})
 
-
+@csrf_exempt
+@login_required
 def taskUpdate(request):
     completed = request.GET.get('completed')
     task_id = request.GET.get('task_id')
     find_task = ManagerToUserTask.objects.get(id =task_id)
     find_task.task_status = completed
-    find_task.save()    
-    
+    find_task.save()
+
     return HttpResponse('done')
 # Function to handle user login......
+
 @csrf_exempt
 def loginUser(request):
     if request.method == "POST":
@@ -272,6 +282,8 @@ def deleteEemployee(request,id):
         emp_data = EmployeeModel.objects.filter(manager_id=all_emp)
         return render(request, 'allemp.html', {'msg':'Emplyee deleted successfully','allemp': emp_data})
 
+
+
 @login_required
 def filterUserTask(request):
         manager_id = request.GET.get('manager_id')
@@ -286,6 +298,56 @@ def filterUserTask(request):
 
         return render(request, 'alltask.html', {'user_task':find_user_task})
 
+@csrf_exempt
+def capture_image(request):
+    num = rm.randint(10000,99999)
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            video_data = data.get("video", "")
+
+            if not video_data:
+                print("❌ No video data received!")
+                return JsonResponse({"error": "No video data received"}, status=400)
+
+            # Extract Base64 data
+            format, video_str = video_data.split(";base64,")
+            ext = format.split("/")[-1]
+
+            # File Path
+            file_name = f"{request.user}{num}.{ext}"
+            folder_name = f"media/{request.user}"
+            os.makedirs(folder_name, exist_ok=True)
+            file_path = os.path.join(f"{folder_name}", file_name)
+
+            # Debug: Print file path
+            print(f"✅ Saving video at: {file_path}")
+
+            # Save Video
+            with open(file_path, "wb") as f:
+                f.write(base64.b64decode(video_str))
+
+            print("✅ Video saved successfully!")
+
+            return JsonResponse({"message": "Video saved successfully!", "file_path": file_path})
+
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
+@csrf_exempt
+def upload_video(request):
+    if request.method == "POST" and request.FILES.get("video"):
+        video = request.FILES["video"]
+        save_path = os.path.join("media", video.name)
 
+        with open(save_path, "wb+") as destination:
+            for chunk in video.chunks():
+                destination.write(chunk)
+
+        return JsonResponse({"message": "Upload successful", "video_url": f"/media/{video.name}"})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
